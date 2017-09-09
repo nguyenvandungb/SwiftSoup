@@ -8,6 +8,14 @@
 
 import Foundation
 
+#if !os(Linux)
+	extension NSTextCheckingResult {
+		func range(at idx: Int) -> NSRange {
+			return rangeAt(idx)
+		}
+	}
+#endif
+
 public struct Pattern {
     public static let CASE_INSENSITIVE: Int = 0x02
     let pattern: String
@@ -68,9 +76,9 @@ public class  Matcher {
 
     public func group(_ i: Int) -> String? {
         let b = matches[index]
-        let c = b.rangeAt(i)
+		let c = b.range(at:i)
         if(c.location == NSNotFound) {return nil}
-        let result = string.substring(c.location, c.length)
+		let result = string.substring(c.location, c.length)
         return result
     }
     public func group() -> String? {

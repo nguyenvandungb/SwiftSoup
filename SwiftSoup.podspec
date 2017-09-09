@@ -21,11 +21,11 @@ Pod::Spec.new do |s|
 SwiftSoup is a Swift library for working with real-world HTML. It provides a very convenient API for extracting and manipulating data, using the best of DOM, CSS, and jquery-like methods.
                        DESC
 
-  s.homepage         = 'https://github.com/scinfu/SwiftSoup'
+  s.homepage         = 'https://github.com/nguyenvandungb/SwiftSoup'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Nabil Chatbi' => 'scinfu@gmail.com' }
-  s.source           = { :git => 'https://github.com/scinfu/SwiftSoup.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/nguyenvandungb/SwiftSoup.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/scinfu'
 
   s.ios.deployment_target = "8.0"

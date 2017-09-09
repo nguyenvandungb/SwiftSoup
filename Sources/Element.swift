@@ -10,12 +10,7 @@ import Foundation
 
 open class Element: Node {
 	var _tag: Tag
-    
-    private static let classString = "class"
-    private static let emptyString = ""
-    private static let idString = "id"
-    private static let rootString = "#root"
-    
+
     //private static let classSplit : Pattern = Pattern("\\s+")
 	private static let classSplit = "\\s+"
 
@@ -96,11 +91,11 @@ open class Element: Node {
      * @return The id attribute, if present, or an empty string if not.
      */
     open func id() -> String {
-        guard let attributes = attributes else {return Element.emptyString}
+        guard let attributes = attributes else {return ""}
         do {
-            return try attributes.getIgnoreCase(key: Element.idString)
+            return try attributes.getIgnoreCase(key: "id")
         } catch {}
-        return Element.emptyString
+        return ""
     }
 
     /**
@@ -164,7 +159,7 @@ open class Element: Node {
 
     private static func accumulateParents(_ el: Element, _ parents: Elements) {
         let parent: Element? = el.parent()
-        if (parent != nil && !(parent!.tagName() == Element.rootString)) {
+        if (parent != nil && !(parent!.tagName() == "#root")) {
             parents.add(parent!)
             accumulateParents(parent!, parents)
         }
@@ -1050,7 +1045,7 @@ open class Element: Node {
      * @return The literal class attribute, or <b>empty string</b> if no class attribute set.
      */
     public func className()throws->String {
-        return try attr(Element.classString).trim()
+        return try attr("class").trim()
     }
 
     /**
@@ -1063,7 +1058,7 @@ open class Element: Node {
 		let fitted = try className().replaceAll(of: Element.classSplit, with: " ", options:.caseInsensitive)
 		let names: [String] = fitted.components(separatedBy: " ")
 		let classNames: OrderedSet<String> = OrderedSet(sequence:names)
-		classNames.remove(Element.emptyString) // if classNames() was empty, would include an empty class
+		classNames.remove("") // if classNames() was empty, would include an empty class
 		return classNames
 	}
 
@@ -1074,7 +1069,7 @@ open class Element: Node {
      */
     @discardableResult
     public func classNames(_ classNames: OrderedSet<String>)throws->Element {
-        try attributes?.put(Element.classString, StringUtil.join(classNames, sep: " "))
+        try attributes?.put("class", StringUtil.join(classNames, sep: " "))
         return self
     }
 
@@ -1085,7 +1080,7 @@ open class Element: Node {
      */
     // performance sensitive
     public func hasClass(_ className: String) -> Bool {
-        let classAtt: String? = attributes?.get(key: Element.classString)
+        let classAtt: String? = attributes?.get(key: "class")
         let len: Int = (classAtt != nil) ? classAtt!.characters.count : 0
         let wantLen: Int = className.characters.count
 
@@ -1288,10 +1283,9 @@ open class Element: Node {
 	}
 
 	override public var hashValue: Int {
-        let prime = 31
-		var result = super.hashValue
-        result = prime.multipliedReportingOverflow(by: result).partialValue.addingReportingOverflow(_tag.hashValue).partialValue
-		return result
+		var h = super.hashValue
+		h = Int.addWithOverflow(Int.multiplyWithOverflow(31, h).0, _tag.hashValue).0
+		return h
 	}
 
 }
